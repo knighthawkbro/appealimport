@@ -16,7 +16,7 @@ import (
 
 // LoadData (Public) - Reads a datafile and loads it into a variable.
 func LoadData() []Appeal {
-	file, err := os.Open("tblApealsData.txt")
+	file, err := os.Open("appeals/tblApealsData.txt")
 	if err != nil {
 		return nil
 	}
@@ -180,9 +180,10 @@ func LoadData() []Appeal {
 	return result
 }
 
+// LoadOutreach (Public) -
 func LoadOutreach() []Outreach {
 	var result []Outreach
-	file, err := os.Open("tblOutreach.txt")
+	file, err := os.Open("appeals/tblOutreach.txt")
 	checkErr(err)
 	reader := csv.NewReader(bufio.NewReader(file))
 	reader.Comma = '\t'
