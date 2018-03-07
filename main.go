@@ -13,10 +13,11 @@ import (
 
 var config = struct {
 	DB struct {
-		Host     string
-		User     string
+		Host     string `required:"true"`
+		Port     string `required:"true"`
+		User     string `required:"true"`
 		Password string `required:"true"`
-		Database string
+		Database string `required:"true"`
 	}
 
 	SFTP struct {
@@ -32,6 +33,7 @@ var config = struct {
 type DBConf struct {
 	Host     string
 	User     string
+	Port     string
 	Password string
 	Database string
 }
@@ -55,6 +57,7 @@ func main() {
 	dbconf := DBConf{
 		Host:     config.DB.Host,
 		User:     config.DB.User,
+		Port:     config.DB.Port,
 		Password: config.DB.Password,
 		Database: config.DB.Database,
 	}
@@ -86,7 +89,7 @@ func main() {
 }
 
 func seedDB(c DBConf, flag bool) *gorm.DB {
-	db, err := gorm.Open("mssql", fmt.Sprintf("sqlserver://%v:%v@%v:1433?database=%v", c.User, c.Password, c.Host, c.Database))
+	db, err := gorm.Open("mssql", fmt.Sprintf("sqlserver://%v:%v@%v:%v?database=%v", c.User, c.Password, c.Host, c.Port, c.Database))
 
 	if err != nil {
 		panic(err.Error())
