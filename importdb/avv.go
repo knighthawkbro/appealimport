@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"time"
 
 	"github.com/pkg/sftp"
@@ -26,6 +27,7 @@ type SFTPConf struct {
 	Folder   string
 }
 
+// AppealsExtract (Public) -
 func AppealsExtract(c SFTPConf) error {
 	conf := &ssh.ClientConfig{
 		User: c.User,
@@ -75,6 +77,7 @@ func AppealsExtract(c SFTPConf) error {
 	return nil
 }
 
+// AppealsTransform (Public) -
 func AppealsTransform() []Appeal {
 	files, err := ioutil.ReadDir("appeals")
 	if err != nil {
@@ -82,6 +85,11 @@ func AppealsTransform() []Appeal {
 	}
 	var result []Appeal
 	for _, file := range files {
+		validExtract := regexp.MustCompile(`^w+.dat$`)
+
+		if !validExtract.MatchString(file.Name()) {
+			continue
+		}
 		f, err := os.Open(fmt.Sprintf("appeals/%v", file.Name()))
 		if err != nil {
 			panic(err)
